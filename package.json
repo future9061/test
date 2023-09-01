@@ -1,0 +1,17 @@
+{
+  "name": "study",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server start"
+  },
+  "repository": "https://github.com/future9061/SNS_restAPI.git",
+  "author": "leemirae <416homin@daum.net>"
+}
