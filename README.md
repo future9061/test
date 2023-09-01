@@ -6,7 +6,6 @@
 4. [❗ 개발 환경](#-개발-환경)
 5. [📌 주요 기능](#-주요-기능)
 6. [🧾 code review](#-code-review)
-7. [💾 업그레이드 및 버전관리](#-업그레이드-및-버전관리)
 8. [📢 Project review](#-project-review)
 
 <br>
