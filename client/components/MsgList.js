@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import fetcher from '../fetcher'
 import useInfiniteScroll from '../hooks/useinfiniteScroll'
 
-
 //input text create
 const MsgList = () => {
   const { query } = useRouter()
