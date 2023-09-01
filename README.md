@@ -13,13 +13,13 @@
 # 💻 프로젝트 소개
 
 - API 통신을 위해 처음으로 server를 구축해 요청과 응답을 전부 경험해본 simple sns(toy) 입니다.
-- React 기반 프로젝트로 next를 더해 SSR을 운영한다.
-- 동일 프로젝트 내에 server와 client를 만들고, workspace를 구분 해 패키지를 별도로 관리한다.
-- 로컬에서 데이터를 만들어 rest API로 CRUD 통신을 실행한다.
-- node.js와 express 프레임 워크로 서버를 구축한다.
-- 통신 함수를 모듈화 하여 HTTP method를 parameter로 받아 활용한다.
-- 통신은 필요에 따라 REST API or GraphQL 중 선택해서 한다.
-- 배포는 AWS 플랫폼으로 한다.
+- React 기반 프로젝트로 next를 더해 SSR을 운영합니다.
+- 동일 프로젝트 내에 server와 client를 만들고, workspace를 구분 해 패키지를 별도로 관리합니다.
+- 로컬에서 데이터를 만들어 rest API로 CRUD 통신을 실행합니다.
+- node.js와 express 프레임 워크로 서버를 구축합니다.
+- 통신 함수를 모듈화 하여 HTTP method를 parameter로 받아 활용합니다.
+- 통신은 필요에 따라 REST API or GraphQL 중 선택해서 사용합니다.
+- AWS 플랫폼으로 배포를 해봤습니다.
 
 <br>
 
