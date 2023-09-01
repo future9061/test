@@ -1,47 +1,46 @@
 import MsgItem from './MsgItem'
 import MsgInput from './MsgInput'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import fetcher from '../fetcher'
+import useInfiniteScroll from '../hooks/useinfiniteScroll'
 
-const UserIds = ['roy', 'jay']
-const getRandomUserId = () => UserIds[Math.round(Math.random())]
 
-const originalMsgs = Array(50).fill(0).map((_, i) => ({
-  id: 50 - i,
-  userId: getRandomUserId() + 50 - i,
-  timestamp: 1234567890123 + (50 - i) * 1000 * 60,
-  text: `${50 + i} mock text`
-}))
 //input text create
 const MsgList = () => {
-  const [msgs, setMsgs] = useState(originalMsgs)
+  const { query } = useRouter()
+  const userId = query.userId || query.userid || ''
+  const [msgs, setMsgs] = useState([])
+  const fetchMoreEl = useRef(null)
+  const intersecting = useInfiniteScroll(fetchMoreEl)//훅
+
   const [editingId, setEditingId] = useState(null)
-  const onCreate = text => {
-    const newMsg = {
-      id: msgs.length + 1,
-      userId: getRandomUserId(),
-      timestamp: Date.now(),
-      text: `${msgs.length} ${text}`
-    }
+  const onCreate = async text => { //버튼을 눌러서 추가 하는 것이기 때문에 useEffect 사용 놉! 바로 async 사용 가능
+    const newMsg = await fetcher('post', '/messages', { text, userId })
+    if (!newMsg) throw Error('뭔가 이상한데?')
     setMsgs(() => [newMsg, ...msgs])
   }
 
   //input text update
-  const onUpdate = (text, id) => {
+  const onUpdate = async (text, id) => {
+    const newMsg = await fetcher('put', `/messages/${id}`, { text, userId })
+    if (!newMsg) throw Error('뭔가 이상한데?')
     setMsgs(msgs => {
       const targetIndex = msgs.findIndex(msg => msg.id === id)
       if (targetIndex < 0) return msgs
       const newMsgs = [...msgs]
-      newMsgs.splice(targetIndex, 1, {
-        ...msgs[targetIndex],
-        text
-      })
+      newMsgs.splice(targetIndex, 1, newMsg)
       return newMsgs
     })
     doneEdit()
   }
-  const onDelete = (id) => {
+
+  const onDelete = async id => {
+    const receivedId = await fetcher('delete', `/messages/${id}`, { params: { userId } })
+    console.log(typeof receivedId, typeof id) //params로 가져온 값과 query로 가져윤 값이 다름
+
     setMsgs(msgs => {
-      const targetIndex = msgs.findIndex(msg => msg.id === id)
+      const targetIndex = msgs.findIndex(msg => msg.id === receivedId + '')
       if (targetIndex < 0) return msgs
       const newMsgs = [...msgs]
       newMsgs.splice(targetIndex, 1)
@@ -51,9 +50,19 @@ const MsgList = () => {
 
   const doneEdit = () => setEditingId(null)
 
+  const getMessages = async () => {
+    const msgs = await fetcher('get', '/messages')
+    setMsgs(msgs)
+  }
+
+  //useEffect 내에서는 asic await 를 직접 호출 안하도록 되어있음
+  useEffect(() => {
+    getMessages()
+  }, [])
+
   return (
     <>
-      <MsgInput mutate={onCreate} />
+      {userId && <MsgInput mutate={onCreate} />}
       <ul className='messages'>
         {
           msgs.map(x => (
@@ -64,10 +73,12 @@ const MsgList = () => {
               startEdit={() => setEditingId(x.id)}
               isEditing={editingId === x.id}
               onDelete={() => onDelete(x.id)}
+              myId={userId}
             />)
           )
         }
-      </ul>
+      </ul >
+      <div ref={fetchMoreEl} />
     </>
   )
 }
