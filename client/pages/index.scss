@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+}
+
+#__next {
+  margin: 10px;
+}
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+.messages_input {
+  text-align: center;
+  border: 1px solid silver;
+  border-radius: 5px;
+  textarea {
+    width: 80%;
+    padding: 10px;
+    flex-grow: 1;
+    resize: none;
+    border: none;
+    outline: none;
+  }
+  button {
+    margin: 5px;
+    width: 60px;
+  }
+}
+
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  &__input {
+    display: flex;
+    width: 80%;
+    max-width: 700px;
+    min-width: 400px;
+    margin: 0 auto 10px;
+
+    > * {
+      box-sizing: border-box;
+    }
+  }
+  .message_item {
+    position: relative;
+    margin: 10px 0;
+    padding: 15px 15px 5px;
+    border-radius: 5px;
+    border: solid 1px #aaa;
+    h3 {
+      font-size: 0.85em;
+      margin: 0 0 10px;
+    }
+    sub {
+      font-weight: normal;
+      margin-left: 5px;
+      vertical-align: baseline;
+    }
+    p {
+      margin: 10px 0;
+    }
+    .message_buttons {
+      button {
+        &:last-child {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
