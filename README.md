@@ -11,18 +11,21 @@
    - [데이터 불러오기(Read)](#-데이터-불러오기read)
    - [새 글 쓰기 기능(Create)](#-새-글-쓰기-기능create)
    - [글 수정 기능(Update)](#-글-수정-기능update)
-7. [📢 Project review](#-project-review)
+   - [글 삭제 기능(Delete)](#-글-삭제-기능delete)
+7. [📢 배포](#📢-배포)
 
 <br>
 
 # 💻 프로젝트 소개
 
-#### 🤔 저의 깃허브를 방문한 사람들이 프로젝트나 소스코드를 본 후 , 그에 대한 코멘트를 받을 수 없다는 게 아쉬웠습니다.
+<div align="center">
+   <img src="https://github.com/future9061/comment/assets/132829711/3b2eca1f-a856-426b-8c72-f962b473a619" width="700px">
+</div>
 
-조언과 격려를 받을 수 있는 코멘트 프로젝트 입니다.
+#### 🤔 저의 깃허브를 방문한 사람들이 프로젝트나 코드를 본 후 그에 대한 코멘트를 받을 수 없다는 게 아쉬웠습니다. <br /> 방문자의 조언이나 격려를 받을 수 있다면 더 많은 동기유발이 될 수 있을 것 같아 제작한 Comment 프로젝트 입니다.
 
 - JSON 형태의 목업 데이터를 만들어 Rest API로 통신합니다.
-- node.js와 express 프레임 워크로 서버를 구축합니다.ㄴ
+- node.js와 express 프레임 워크로 서버를 구축합니다.
 - React 기반 프로젝트로 next를 더해 SSR을 운영합니다.
 - 동일 프로젝트 내에 server와 client를 만들고, workspace를 구분 해 패키지를 별도로 관리합니다.
 - 통신 함수를 모듈화 하여 HTTP method를 parameter로 받아 활용합니다.
@@ -72,7 +75,7 @@
 
 # ⏲ 개발 기간
 
-- 2023.09.01 ~ 2023.09.03
+- 2023.08.31 ~ 2023.09.04
 
 <br>
 
@@ -93,22 +96,26 @@
 # 📌 주요 기능
 
 - 데이터 불러오기(Read)
+  - 컴포넌트가 랜더링 되면 Get 메소드로 서버에 데이터를 요청합니다.
+  - Get 요청을 받은 서버는 JSON 파일에 있는 데이터를 읽어 response 합니다.
 
 <br >
 
 - 새 글 쓰기 기능(Create)
-  - input 내용 입력 시
-  - input은 create, update 두 군데에서 사용됩니.
+  - 사용자가 새 글을 입력 시 새 글과 함께 Post 요청이 서버에 보내집니다.
+  - Post 요청을 받은 서버는 새 글을 받아 객체 형식으로 정리해 이전 데이터 배열에 추가합니다.
 
 <br >
 
 - 글 수정 기능(Update)
-  - 작성한 코멘트에 수정 버튼을 누르면 새 입력창이 나옵니다.
-  - 새 글을 작성 후 확인 버튼을 누르면 Put으로 text 데이터만 변경됩니다.
+  - 사용자가 기존 글을 수정 시 수정한 글, 아이디과 함께 Put 요청이 서버에 보내집니다.
+  - Put 요청을 받은 서버는 받은 아이디와 일치하는 데이터를 찾아 새로운 글로 변경 후 데이터를 저장합니다.
 
 <br >
 
 - 글 삭제 기능(Delete)
+  - 사용자가 기존 글을 삭제 시 id와 함께 Delete 요청이 서버에 보내집니다.
+  - Delete 요청을 받은 서버는 해당 id와 일치하는 데이터를 찾아 배열에서 제외합니다.
 
 <br >
 
@@ -226,7 +233,7 @@ export default fetcher;
 
 <br >
 
-##### ✔ 데이터 불러오기(Read)
+#### ✔ 데이터 불러오기(Read)
 
 ```javascript
 //MsgList.js
@@ -246,8 +253,12 @@ useEffect(() => {
 
 #### ✔ 새 글 쓰기 기능(Create)
 
+- 사용의 text를 post method로 서버로 보낸다.
+- 서버는 text를 받아 newMsg 변수에 담는다.
+- newMsg는 기존 데이터 배열로 unshift 되어 데이터에 추가된다.
+
 ```javascript
-//MsgList.js
+//client MsgList.js
 
 const onCreate = async (text) => {
   const newMsg = await fetcher("post", "/messages", { text });
@@ -260,8 +271,11 @@ const onCreate = async (text) => {
 
 #### ✔ 글 수정 기능(Update)
 
+- 수정 text를 해당 id와 함께 서버로 보낸다.
+- 서버에서 해당 id를 findIndex로 일치하는 데이터를 찾아 text를 변경한다.
+
 ```javascript
-//MsgList.js
+//client MsgList.js
 
 const onUpdate = async (text, id) => {
   //특정 id와 text를 받아온다.
@@ -274,3 +288,29 @@ const onUpdate = async (text, id) => {
   });
 };
 ```
+
+<br />
+
+#### ✔ 글 삭제 기능(Delete)
+
+- 해당 id 값을 서버로 보낸다.
+- 서버는 받은 id값과 일치하는 데이터를 findIndex로 찾아 splice 한다.
+
+```javascript
+//client MsgList.js
+const onDelete = async (id) => {
+  const receivedId = await fetcher("delete", `/messages/${id}`);
+
+  setMsgs((msgs) => {
+    const targetIndex = msgs.findIndex((msg) => msg.id === receivedId + "");
+    if (targetIndex < 0) return msgs;
+    const newMsgs = [...msgs];
+    newMsgs.splice(targetIndex, 1);
+    return newMsgs;
+  });
+};
+```
+
+<br />
+
+# 📢 배포

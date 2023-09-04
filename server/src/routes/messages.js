@@ -34,7 +34,6 @@ const messagesRoute = [
       const newMsg = {
         id: v4(),
         text: body.text,
-        userId: body.userId,
         timestamp: Date.now()
       }
       msgs.unshift(newMsg)
@@ -49,7 +48,6 @@ const messagesRoute = [
         const msgs = readDB('messages')
         const targetIndex = msgs.findIndex((msg) => msg.id === id)
         if (targetIndex < 0) throw '메세지가 없습니다'
-        if (msgs[targetIndex].userId !== body.userId) throw '사용자가 다릅니다.'
 
         const newMsg = { ...msgs[targetIndex], text: body.text }
         msgs.splice(targetIndex, 1, newMsg)
@@ -62,12 +60,11 @@ const messagesRoute = [
   }, {
     method: 'delete',
     route: "/messages/:id",
-    handler: ({ body, params: { id } }, res) => {
+    handler: ({ params: { id } }, res) => {
       try {
         const msgs = readDB('messages')
         const targetIndex = msgs.findIndex((msg) => msg.id === id)
         if (targetIndex < 0) throw '메세지가 없습니다'
-        if (msgs[targetIndex].userId !== body.userId) throw '사용자가 다릅니다.'
 
         msgs.splice(targetIndex, 1)
         setMsgs(msgs)

@@ -1,5 +1,5 @@
 {
-  "name": "study",
+  "name": "restAPI",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -11,7 +11,5 @@
   "scripts": {
     "client": "yarn workspace client start",
     "server": "yarn workspace server start"
-  },
-  "repository": "https://github.com/future9061/SNS_restAPI.git",
-  "author": "leemirae <416homin@daum.net>"
+  }
 }
