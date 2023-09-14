@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const messagesRoute = require('./routes/messages.js');
+import express from 'express'
+import cors from 'cors'
+import messagesRoute from './routes/messages.js'
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
